@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "ts-node index.ts"
+    "register": "ts-node index.ts"
   },
   "author": "HeroDevs",
   "license": "MIT",

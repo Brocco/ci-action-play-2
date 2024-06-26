@@ -55,7 +55,7 @@ runs:
         NES_UNIVERSE_CLIENT_SECRET: ${{ inputs.nesUniverseClientSecret }}
         ACCESS_TOKEN: ${{ steps.get-access-token.outputs.ACCESS_TOKEN }}
       shell: bash
-      run: npm run start
+      run: npm run register
       # with:
       #   script: |
       #     const main = require('${{ gith
