@@ -1,0 +1,61 @@
+name: 'NES Register'
+description: 'Register package versions with the NES registry'
+
+inputs:
+  packageName:
+    description: 'package name'
+    required: true
+  versions:
+    description: 'list of versions to register'
+    required: true
+  release:
+    description: 'release flag value'
+    required: false
+    default: 'false'
+  nesUniverseClientId:
+    description: 'NES Universe client ID'
+    required: true
+  nesUniverseClientSecret:
+    description: 'NES Universe client secret'
+    required: true
+  nes-ci-token:
+    description: 'token to access the nes-ci repository'
+    required: true
+runs:
+  using: composite
+  steps:
+    # Checkout the nes-ci repository to get the files associated with this action
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        repository: 'brocco/ci-action-play-2'
+        path: ${{ github.workspace }}/nes-ci
+        # token: ${{ inputs.nes-ci-token }}
+
+    - name: install dependencies
+      shell: bash
+      working-directory: ${{ github.workspace }}/nes-ci/.github/actions/nes-register
+      run: npm install
+
+    # - name: get access token
+    #   shell: bash
+    #   id: get-access-token
+    #   run: |
+    #     echo "ACCESS_TOKEN=$(curl -s -X POST 'https://idp.herodevs.io/realms/universe/protocol/openid-connect/token' \
+    #       -H 'Content-Type: application/x-www-form-urlencoded' \
+    #       -d "grant_type=client_credentials&client_id=${{ inputs.nesUniverseClientId }}&client_secret=${{ inputs.nesUniverseClientSecret }}" \
+    #       | jq -r ".access_token")" >> "$GITHUB_OUTPUT"
+    - name: run register script updated
+      # uses: actions/github-script@v7
+      env:
+        PACKAGE_NAME: ${{ inputs.packageName }}
+        VERSIONS: ${{ inputs.versions }}
+        RELEASE: ${{ inputs.release }}
+        NES_UNIVERSE_CLIENT_ID: ${{ inputs.nesUniverseClientId }}
+        NES_UNIVERSE_CLIENT_SECRET: ${{ inputs.nesUniverseClientSecret }}
+        ACCESS_TOKEN: ${{ steps.get-access-token.outputs.ACCESS_TOKEN }}
+      shell: bash
+      run: npm run start
+      # with:
+      #   script: |
+      #     const main = require('${{ gith
