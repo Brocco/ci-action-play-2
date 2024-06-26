@@ -55,6 +55,7 @@ runs:
         NES_UNIVERSE_CLIENT_SECRET: ${{ inputs.nesUniverseClientSecret }}
         ACCESS_TOKEN: ${{ steps.get-access-token.outputs.ACCESS_TOKEN }}
       shell: bash
+      working-directory: ${{ github.workspace }}/nes-ci/.github/actions/nes-register
       run: npm run register
       # with:
       #   script: |
